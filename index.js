@@ -19,22 +19,22 @@ async function invokeAction({ action, id, name, email, phone }) {
     switch (action) {
       case 'list':
         const allContactsData = await listContacts();
-        console.log(allContactsData);
+        console.dir(allContactsData);
         break;
   
       case 'get':
         const contactDataId = await getContactById(id);
-        console.log(contactDataId);
+        console.dir(contactDataId);
         break;
   
       case 'add':
-        const newContactData = await addContact({id, name, email, phone});
-        console.log(newContactData);
+        const newContactData = await addContact({ name, email, phone});
+        console.dir(newContactData);
         break;
   
       case 'remove':
-        const deleteContactId = await removeContact();
-        console.log(deleteContactId);
+        const deleteContactId = await removeContact(id);
+        console.dir(deleteContactId);
         break;
   
       default:
@@ -42,9 +42,20 @@ async function invokeAction({ action, id, name, email, phone }) {
     }
   }
   
-// invokeAction(argv); 
 
- invokeAction({action: "list"});
+  const actionIndex = process.argv.indexOf("--action");
+  if (actionIndex !== -1) {
+    const action = process.argv[actionIndex + 1];
+    invokeAction({action});
+  }
+
+//  invokeAction(argv); 
+
+  // invokeAction({action: "list"});
+  // invokeAction({action: "get", id: "drsAJ4SHPYqZeG-83QTVW" });
+  // invokeAction({action: "add", name: "Alice", email: "alice.contacts@gmail.com", phone: "(500) 128-1293"});
+  // invokeAction({action: "remove", id: "Z5sbDlS7pCzNsnAHLtDJd"});
+
 
 // (async () => {
 //     await invokeAction(argv);
