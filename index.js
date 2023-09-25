@@ -1,19 +1,24 @@
 
-const { Command } = require('commander');
-
+// const { Command } = require('commander');
+const { program } = require('commander');
 const { listContacts, getContactById, addContact, removeContact } = require('./contacts');
 
-const program = new Command();
-program
-  .option('-a, --action <type>', 'choose action')
-  .option('-i, --id <type>', 'user id')
-  .option('-n, --name <type>', 'user name')
-  .option('-e, --email <type>', 'user email')
-  .option('-p, --phone <type>', 'user phone');
+// --------------------------------------------------
 
-program.parse(process.argv);
+// const program = new Command();
+// program
+//   .option('-a, --action <type>', 'choose action')
+//   .option('-i, --id <type>', 'user id')
+//   .option('-n, --name <type>', 'user name')
+//   .option('-e, --email <type>', 'user email')
+//   .option('-p, --phone <type>', 'user phone');
 
-const argv = program.opts();
+// program.parse(process.argv);
+
+// const argv = program.opts();
+
+// -----------------------------------------------------
+
 
 async function invokeAction({ action, id, name, email, phone }) {
     switch (action) {
@@ -28,7 +33,7 @@ async function invokeAction({ action, id, name, email, phone }) {
         break;
   
       case 'add':
-        const newContactData = await addContact({ name, email, phone});
+        const newContactData = await addContact(name, email, phone);
         console.dir(newContactData);
         break;
   
@@ -43,20 +48,30 @@ async function invokeAction({ action, id, name, email, phone }) {
   }
   
 
-  const actionIndex = process.argv.indexOf("--action");
-  if (actionIndex !== -1) {
-    const action = process.argv[actionIndex + 1];
-    invokeAction({action});
-  }
+  program
+    .option("--action, <type>")
+    .option("--id, <type>")
+    .option("--name, <type>")
+    .option("--email, <type>")
+    .option("--phone, <type>");
 
-//  invokeAction(argv); 
+program.parse();
 
+const options = program.opts();
+invokeAction(options);
+
+  // const actionIndex = process.argv.indexOf("--action");
+  // if (actionIndex !== -1) {
+  //   const action = process.argv[actionIndex + 1];
+  //   invokeAction({action});
+  // }
+
+// ----------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------
   // invokeAction({action: "list"});
   // invokeAction({action: "get", id: "drsAJ4SHPYqZeG-83QTVW" });
   // invokeAction({action: "add", name: "Alice", email: "alice.contacts@gmail.com", phone: "(500) 128-1293"});
   // invokeAction({action: "remove", id: "Z5sbDlS7pCzNsnAHLtDJd"});
 
-
-// (async () => {
-//     await invokeAction(argv);
-//   })();
+// -------------------------------------------------------------------------------
